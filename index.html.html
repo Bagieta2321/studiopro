@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio PRO - Premium Experience</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: #050505;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .bg-blobs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            background: #050505;
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(90px);
+            opacity: 0.6;
+            animation: moveBlob 20s infinite alternate;
+        }
+
+        .blob-1 {
+            width: 500px;
+            height: 500px;
+            background: #ff007f;
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .blob-2 {
+            width: 600px;
+            height: 600px;
+            background: #7000ff;
+            bottom: -200px;
+            right: -100px;
+            animation-delay: -5s;
+        }
+
+        .blob-3 {
+            width: 400px;
+            height: 400px;
+            background: #00f0ff;
+            top: 40%;
+            left: 30%;
+            animation-delay: -10s;
+        }
+
+        @keyframes moveBlob {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(100px, 150px) scale(1.2); }
+            100% { transform: translate(-50px, 50px) scale(0.9); }
+        }
+
+        nav {
+            background: rgba(10, 10, 10, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            background: linear-gradient(90deg, #ff007f, #7000ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links li {
+            position: relative;
+            margin: 0 20px;
+        }
+
+        .nav-links a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: #00f0ff;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active-link {
+            color: #fff;
+        }
+
+        .nav-links a:hover::after, .nav-links a.active-link::after {
+            width: 100%;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: rgba(15, 15, 15, 0.8);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.1);
+            min-width: 220px;
+            top: 200%;
+            left: -20px;
+            border-radius: 12px;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .dropdown-content a {
+            padding: 15px 20px;
+            display: block;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .dropdown-content a::after {
+            display: none;
+        }
+
+        .dropdown-content a:hover {
+            background: rgba(255,255,255,0.05);
+            padding-left: 25px;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            top: 150%;
+        }
+
+        main {
+            margin-top: 120px;
+            padding: 40px;
+            min-height: 80vh;
+            display: flex;
+            justify-content: center;
+            perspective: 1000px;
+        }
+
+        .section {
+            display: none;
+            width: 100%;
+            max-width: 1100px;
+            background: rgba(20, 20, 20, 0.3);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 60px;
+            border-radius: 24px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+            animation: slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transform-style: preserve-3d;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .tilt-element {
+            transition: transform 0.1s ease-out;
+            transform-style: preserve-3d;
+        }
+
+        .section-img {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            border-radius: 16px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transform: translateZ(30px);
+        }
+
+        h1 {
+            font-size: 54px;
+            font-weight: 900;
+            margin-bottom: 25px;
+            background: linear-gradient(to right, #fff, #a3a3a3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transform: translateZ(40px);
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: #00f0ff;
+            transform: translateZ(20px);
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.9;
+            color: #a3a3a3;
+            margin-bottom: 25px;
+            transform: translateZ(20px);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 16px 40px;
+            background: linear-gradient(45deg, #ff007f, #7000ff);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transform: translateZ(50px);
+            box-shadow: 0 10px 20px rgba(112, 0, 255, 0.3);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.4s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            box-shadow: 0 15px 30px rgba(255, 0, 127, 0.4);
+        }
+
+        ul.custom-list {
+            margin-left: 20px;
+            margin-bottom: 30px;
+            color: #a3a3a3;
+            line-height: 2;
+            transform: translateZ(20px);
+            list-style-type: none;
+        }
+
+        ul.custom-list li {
+            position: relative;
+            padding-left: 25px;
+        }
+
+        ul.custom-list li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: #00f0ff;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(60px) rotateX(10deg);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <nav>
+        <div class="logo">STUDIO PRO</div>
+        <ul class="nav-links">
+            <li><a class="nav-item active-link" data-target="strona-glowna">Główna</a></li>
+            <li><a class="nav-item" data-target="o-nas">O nas</a></li>
+            <li class="dropdown">
+                <a class="nav-item">Oferta ▼</a>
+                <div class="dropdown-content">
+                    <a class="nav-item" data-target="oferta-www">Strony WWW</a>
+                    <a class="nav-item" data-target="oferta-grafika">Grafika 3D</a>
+                    <a class="nav-item" data-target="oferta-marketing">Marketing</a>
+                </div>
+            </li>
+            <li><a class="nav-item" data-target="kontakt">Kontakt</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div id="strona-glowna" class="section tilt-element active">
+            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200" alt="Cyberpunk Tech" class="section-img tilt-element">
+            <h1 class="tilt-element">Przyszłość Internetu jest tutaj</h1>
+            <p class="tilt-element">Przygotowaliśmy cyfrowe doświadczenie klasy Premium. Ta strona wykorzystuje szkliste powłoki (Glassmorphism), dynamiczne oświetlenie oraz renderowanie elementów w przestrzeni 3D. Przesuwaj myszką po tej karcie, aby zobaczyć efekt trójwymiarowej głębi.</p>
+            <p class="tilt-element">Nie tworzymy zwykłych wizytówek. Tworzymy wciągające, interaktywne portale, które zapadają w pamięć Twoich klientów od pierwszej sekundy.</p>
+            <button class="btn nav-item tilt-element" data-target="o-nas">Odkryj nasz świat</button>
+        </div>
+
+        <div id="o-nas" class="section tilt-element">
+            <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1200" alt="Nasz zespół" class="section-img tilt-element">
+            <h1 class="tilt-element">Złączeni kodem i sztuką</h1>
+            <p class="tilt-element">STUDIO PRO to kolektyw wizjonerów. Przekraczamy granice płaskich ekranów, łącząc najnowszą technologię webową z odważnym designem. Nasz kod jest tak samo czysty i zoptymalizowany, jak zapierająca dech w piersiach strona wizualna.</p>
+            <h2 class="tilt-element">Nasz standard</h2>
+            <ul class="custom-list tilt-element">
+                <li>Hiper-realistyczne interakcje 3D w oknie przeglądarki.</li>
+                <li>Architektura bez przeładowań (Single Page Application).</li>
+                <li>Maksymalna wydajność przy 60 klatkach na sekundę.</li>
+            </ul>
+        </div>
+
+        <div id="oferta-www" class="section tilt-element">
+            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200" alt="Kodowanie stron" class="section-img tilt-element">
+            <h1 class="tilt-element">Inżynieria Webowa</h1>
+            <p class="tilt-element">Zostawiamy w tyle tradycyjne platformy. Budujemy serwisy w oparciu o najnowsze frameworki JavaScript, WebGL i CSS3. Każdy piksel na stronie ma swoje zadanie, a każda animacja ma dokładnie wyliczony timing, aby zachwycić użytkownika.</p>
+            <h2 class="tilt-element">Optymalizacja i Płynność</h2>
+            <p class="tilt-element">Nasze serwisy wczytują się błyskawicznie. Stosujemy zaawansowane techniki ładowania asynchronicznego oraz sprzętową akcelerację grafiki, co sprawia, że strony działają nieskazitelnie płynnie nawet na słabszych urządzeniach mobilnych.</p>
+        </div>
+
+        <div id="oferta-grafika" class="section tilt-element">
+            <img src="https://images.unsplash.com/photo-1633424103091-a1e6878b277b?w=1200" alt="Grafika 3D" class="section-img tilt-element">
+            <h1 class="tilt-element">Immersyjna Grafika 3D</h1>
+            <p class="tilt-element">Kreujemy światy, w które można wejść bez okularów VR. Generujemy interaktywne modele produktów, fotorealistyczne środowiska i abstrakcyjne formy przestrzenne, które możesz obracać i badać bezpośrednio w przeglądarce.</p>
+            <h2 class="tilt-element">WebGL i Canvas</h2>
+            <p class="tilt-element">Z pomocą technologii WebGL przełamujemy ograniczenia dwuwymiarowego internetu, dostarczając płynną i interaktywną grafikę generowaną w czasie rzeczywistym przez kartę graficzną Twojego komputera.</p>
+        </div>
+
+        <div id="oferta-marketing" class="section tilt-element">
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200" alt="Wizualizacja Danych" class="section-img tilt-element">
+            <h1 class="tilt-element">Wzrost napędzany danymi</h1>
+            <p class="tilt-element">Opieramy działania na precyzyjnej analityce. Śledzimy najmniejsze mikro-interakcje na Twojej stronie, wyciągamy wnioski i w czasie rzeczywistym optymalizujemy ścieżki zakupowe za pomocą testów A/B opartych na sztucznej inteligencji.</p>
+            <h2 class="tilt-element">Algorytmiczne Kampanie</h2>
+            <p class="tilt-element">Nasze reklamy same uczą się, kogo mają szukać. Z pomocą zaawansowanego uczenia maszynowego maksymalizujemy zwrot z inwestycji (ROI) we wszystkich najpopularniejszych platformach reklamowych.</p>
+        </div>
+
+        <div id="kontakt" class="section tilt-element">
+            <img src="https://images.unsplash.com/photo-1534536281715-e28d76689b4d?w=1200" alt="Kontakt" class="section-img tilt-element">
+            <h1 class="tilt-element">Wejdźmy na wyższy poziom</h1>
+            <p class="tilt-element">Nie tracimy czasu na standardowe rozwiązania. Jeśli szukasz zespołu, który stworzy dla Ciebie coś całkowicie unikalnego, cyfrowe dzieło sztuki, które wyróżni Cię na tle całej branży – jesteś we właściwym miejscu.</p>
+            <p class="tilt-element">Rozpocznijmy proces projektowy.</p>
+            <button class="btn tilt-element" onclick="window.location.href='mailto:premium@studiopro.pl'">Zainicjuj połączenie</button>
+        </div>
+    </main>
+
+    <script>
+        const navLinks = document.querySelectorAll('.nav-item[data-target]');
+        const sections = document.querySelectorAll('.section');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('data-target');
+                if(!targetId) return;
+
+                navLinks.forEach(btn => btn.classList.remove('active-link'));
+                
+                if(this.closest('.dropdown')) {
+                    this.closest('.dropdown').querySelector('.nav-item').classList.add('active-link');
+                } else {
+                    this.classList.add('active-link');
+                }
+
+                sections.forEach(sec => {
+                    sec.classList.remove('active');
+                });
+
+                const targetSection = document.getElementById(targetId);
+                if(targetSection) {
+                    targetSection.classList.add('active');
+                    targetSection.style.animation = 'none';
+                    targetSection.offsetHeight; 
+                    targetSection.style.animation = 'slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+                }
+            });
+        });
+
+        const mainContainer = document.querySelector('main');
+        
+        mainContainer.addEventListener('mousemove', (e) => {
+            const activeSection = document.querySelector('.section.active');
+            if(!activeSection) return;
+
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 40;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 40;
+
+            activeSection.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+
+        mainContainer.addEventListener('mouseenter', () => {
+            const activeSection = document.querySelector('.section.active');
+            if(activeSection) {
+                activeSection.style.transition = 'none';
+            }
+        });
+
+        mainContainer.addEventListener('mouseleave', () => {
+            const activeSection = document.querySelector('.section.active');
+            if(activeSection) {
+                activeSection.style.transition = 'transform 0.5s ease';
+                activeSection.style.transform = `rotateY(0deg) rotateX(0deg)`;
+            }
+        });
+    </script>
+</body>
+</html>
